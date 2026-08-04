@@ -10,6 +10,9 @@ const { exec } = require('child_process');
 const app = express();
 app.use(cors());
 
+// Serve a interface web (public/index.html) na raiz da aplicacao
+app.use(express.static(path.join(__dirname, 'public')));
+
 const upload = multer({ dest: os.tmpdir() });
 
 app.post('/api/extrair-tabela', upload.single('arquivo'), (req, res) => {
@@ -249,4 +252,5 @@ app.post('/api/extrair-tabela', upload.single('arquivo'), (req, res) => {
     });
 });
 
-app.listen(3000, () => console.log('API rodando na porta 3000'));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`API rodando na porta ${PORT}`));

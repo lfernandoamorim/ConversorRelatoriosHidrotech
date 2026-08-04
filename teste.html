@@ -1,16 +1,22 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <title>Download Nativo</title>
 </head>
+
 <body>
     <h2>Extrair PDF para Excel</h2>
-    
+
     <!-- Formulário nativo. Sem JavaScript, sem Blobs, sem bloqueios do navegador. -->
-    <form action="http://localhost:3000/api/extrair-tabela" method="POST" enctype="multipart/form-data">
+    <form action="https://convertexcel.maisumnegocio.com.br/api/extrair-tabela" method="POST"
+        enctype="multipart/form-data">
         <input type="file" name="arquivo" accept="application/pdf" required>
-        <button type="submit" style="padding: 10px; cursor: pointer; background: #007bff; color: white; border: none;">Converter e Baixar</button>
+        <button type="submit"
+            style="padding: 10px; cursor: pointer; background: #007bff; color: white; border: none;">Converter e
+            Baixar</button>
     </form>
 </body>
+
 </html>

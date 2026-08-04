@@ -1,0 +1,54 @@
+version: "3.7"
+services:
+  # Define o servico da API de conversao Hidrotech (PDF -> Excel)
+  hidrotech-conversor:
+    # Imagem construida localmente na VPS (ver README.md, secao "Deploy")
+    # Formato: <nome-da-imagem>:<tag>
+    image: hidrotech-conversor:latest
+    # Define o hostname do container
+    hostname: "{{.Service.Name}}.{{.Task.Slot}}"
+    # Define a rede que o container vai utilizar
+    networks:
+      - network_public
+    # Variaveis de ambiente da aplicacao
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+    deploy:
+      # Define o modo de deploy do servico
+      mode: replicated
+      # Define o numero de replicas
+      replicas: 1
+      # Define em qual(is) node(s) o servico pode rodar
+      # IMPORTANTE: como a imagem e construida localmente (nao vem de um registry),
+      # o servico precisa ficar preso ao node onde a imagem foi buildada.
+      placement:
+        constraints:
+          - node.role == manager
+          # - node.hostname == worker1
+      resources:
+        limits:
+          # Limite de CPU para evitar travamento do host
+          cpus: "1"
+          # Limite de RAM (Java + Node juntos consomem mais que uma API pura Node)
+          memory: 1024M
+      labels:
+        # Habilita o Traefik
+        - traefik.enable=true
+        # Configura o dominio de acesso da API/interface
+        - traefik.http.routers.hidrotech-conversor.rule=Host(`convertexcel.maisumnegocio.com.br`)
+        # Configura o entrypoint HTTPS
+        - traefik.http.routers.hidrotech-conversor.entrypoints=websecure
+        # Configura o resolver de certificado SSL (Let's Encrypt)
+        - traefik.http.routers.hidrotech-conversor.tls.certresolver=letsencryptresolver
+        # Configura o servico associado a esse router
+        - traefik.http.routers.hidrotech-conversor.service=hidrotech-conversor
+        # Configura a porta interna do container que o Traefik deve expor
+        - traefik.http.services.hidrotech-conversor.loadbalancer.server.port=3000
+        # Habilita o passHostHeader
+        - traefik.http.services.hidrotech-conversor.loadbalancer.passHostHeader=true
+
+networks:
+  network_public:
+    name: network_public
+    external: true
