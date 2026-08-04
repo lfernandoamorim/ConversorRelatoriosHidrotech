@@ -33,7 +33,7 @@ npm install
 node app.js
 ```
 
-Acesse **http://localhost:3000** para usar a interface, ou chame a API diretamente:
+Acesse **<http://localhost:3000>** para usar a interface, ou chame a API diretamente:
 
 ```
 POST http://localhost:3000/api/extrair-tabela
@@ -51,6 +51,19 @@ Traefik já rodando como proxy reverso e a rede externa `network_public` criada
 
 Envie esta pasta para a VPS (via `git clone` do seu repositório, `scp`, etc.), incluindo
 o arquivo `tabula-1.0.5-jar-with-dependencies.jar`.
+
+Acesse a pasta opt:
+
+```bash
+cd /opt
+
+```
+
+Depois baixe o projeto:
+
+```bash
+git clone https://github.com/<USUARIO>/ConversorRelatoriosHidrotech.git
+```
 
 ### 2. Buildar a imagem Docker
 
@@ -75,9 +88,11 @@ do compose pelo caminho do registry.
 2. Dê um nome (ex.: `hidrotech-conversor`).
 3. Cole o conteúdo de `docker-compose.yml`.
 4. Ajuste a linha do domínio antes de subir:
+
    ```yaml
    - traefik.http.routers.hidrotech-conversor.rule=Host(`conversor.seudominio.com.br`)
    ```
+
 5. Clique em **Deploy the stack**.
 
 O Traefik vai expor a aplicação em `https://conversor.seudominio.com.br`, com SSL
